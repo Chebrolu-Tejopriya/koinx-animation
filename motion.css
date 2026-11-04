@@ -66,6 +66,17 @@
 .processor [data-node-id='11250:186142']::after { animation-delay: 2s; }
 .processor [data-node-id='11250:186148']::after { animation-delay: 4s; }
 .processor [data-node-id='11250:186124']::after { animation-delay: 6s; }
+.processor[data-highlight-style='border'] [data-node-id='11250:186124']::after,
+.processor[data-highlight-style='border'] [data-node-id='11250:186130']::after,
+.processor[data-highlight-style='border'] [data-node-id='11250:186142']::after,
+.processor[data-highlight-style='border'] [data-node-id='11250:186148']::after {
+  background: linear-gradient(135deg,#76bcff,#2252ef 60%,#507cff);
+  mask-image: url('assets/processor-imgVector2.svg'),url('assets/processor-imgVector2.svg');
+  mask-size: 100% 100%,calc(100% - 4px) calc(100% - 4px);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-composite: exclude;
+}
 @keyframes processor-highlight {
   0%,25%,100% { opacity: 0; }
   5%,20% { opacity: 1; }

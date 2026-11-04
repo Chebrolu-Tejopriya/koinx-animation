@@ -32,3 +32,25 @@ iconLayoutControl.addEventListener('click', event => {
   }
   window.dispatchEvent(new Event('resize'));
 });
+
+const processorStyleControl = document.createElement('div');
+processorStyleControl.className = 'processor-style-control';
+processorStyleControl.setAttribute('role','group');
+processorStyleControl.setAttribute('aria-label','Processor highlight style');
+processorStyleControl.innerHTML = '<span>Highlight</span><button type="button" data-processor-style="fill">Fill</button><button type="button" data-processor-style="border">Border</button>';
+iconLayoutControl.append(processorStyleControl);
+function selectProcessorStyle(style) {
+  const next = style === 'border' ? 'border' : 'fill';
+  document.querySelector('.processor').dataset.highlightStyle = next;
+  for (const button of processorStyleControl.querySelectorAll('button')) {
+    button.setAttribute('aria-pressed',String(button.dataset.processorStyle === next));
+  }
+  const url = new URL(location.href);
+  url.searchParams.set('processorStyle',next);
+  history.replaceState(null,'',url);
+}
+processorStyleControl.addEventListener('click',event => {
+  const button = event.target.closest('button[data-processor-style]');
+  if (button) selectProcessorStyle(button.dataset.processorStyle);
+});
+selectProcessorStyle(new URL(location.href).searchParams.get('processorStyle'));

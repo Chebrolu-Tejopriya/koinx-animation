@@ -28,6 +28,8 @@
 }
 .output-wire { stroke: #484e63; stroke-dasharray: 6 6; animation-name: output-dots; animation-duration: 1.2s; }
 .icon-layout-control { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px; margin-top: 22px; }
+.processor-style-control { display: flex; align-items: center; gap: 4px; margin-left: 12px; }
+.processor-style-control > span { color: #a9afc5; font: 400 12px/20px 'Space Grotesk',sans-serif; margin-right: 4px; }
 .icon-layout-control > span { color: #a9afc5; font: 400 12px/20px 'Space Grotesk',sans-serif; margin-right: 8px; }
 .icon-layout-control button { padding: 6px 12px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #a9afc5; font: 500 12px/20px 'Space Grotesk',sans-serif; cursor: pointer; }
 .icon-layout-control button[aria-pressed='true'] { background: #171a26; border-color: #2d3246; color: #eff5ff; }
