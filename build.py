@@ -9,7 +9,8 @@ sources += json.loads(Path('feature-v2-parts.json').read_text(encoding='utf-8'))
 assets = {}
 for item in sources:
     for name, url in re.findall(r'const (\w+) = "(https:[^"]+)";', item['code']):
-        assets.setdefault(url, f"assets/{item['name']}-{name}.{url.rsplit('.',1)[1]}")
+        revision = '-'+item['assetRevision'] if item.get('assetRevision') else ''
+        assets.setdefault(url, f"assets/{item['name']}{revision}-{name}.{url.rsplit('.',1)[1]}")
 
 simple = {
  '-scale-x-100':'scale:-1 1',
