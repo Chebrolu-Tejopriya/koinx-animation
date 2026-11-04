@@ -20,9 +20,9 @@ const iconLayoutControl = document.createElement('div');
 iconLayoutControl.className = 'icon-layout-control';
 iconLayoutControl.setAttribute('role', 'group');
 iconLayoutControl.setAttribute('aria-label', 'Exchange icon layout');
-iconLayoutControl.innerHTML = '<span>Icon layout</span><button type="button" data-icon-layout="aligned" aria-pressed="true">Aligned</button><button type="button" data-icon-layout="scattered" aria-pressed="false">Scattered</button>';
+iconLayoutControl.innerHTML = '<span>Icon layout</span><button type="button" data-icon-layout="scattered" aria-pressed="true">Scattered</button><button type="button" data-icon-layout="aligned" aria-pressed="false">Aligned</button>';
 document.querySelector('.heading').append(iconLayoutControl);
-document.querySelector('.scene').dataset.iconLayout = 'aligned';
+document.querySelector('.scene').dataset.iconLayout = 'scattered';
 iconLayoutControl.addEventListener('click', event => {
   const button = event.target.closest('button[data-icon-layout]');
   if (!button) return;
