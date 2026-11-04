@@ -5,12 +5,14 @@ sources = json.loads(Path('design-context.json').read_text(encoding='utf-8'))
 sources += json.loads(Path('reconciliation-context.json').read_text(encoding='utf-8'))
 sources += json.loads(Path('features-context.json').read_text(encoding='utf-8'))
 sources += json.loads(Path('feature-motion-parts.json').read_text(encoding='utf-8'))
+sources += json.loads(Path('feature-v2-parts.json').read_text(encoding='utf-8'))
 assets = {}
 for item in sources:
     for name, url in re.findall(r'const (\w+) = "(https:[^"]+)";', item['code']):
         assets.setdefault(url, f"assets/{item['name']}-{name}.{url.rsplit('.',1)[1]}")
 
 simple = {
+ '-scale-x-100':'scale:-1 1',
  'border':'border-width:1px','border-l':'border-left-width:1px','border-r':'border-right-width:1px','h-px':'height:1px','w-px':'width:1px','left-px':'left:1px','z-[1]':'z-index:1','isolate':'isolation:isolate','-translate-x-1/2':'--tx:-50%;translate:var(--tx,0px) var(--ty,0px)','-translate-y-1/2':'--ty:-50%;translate:var(--tx,0px) var(--ty,0px)','bg-gradient-to-r':'background:linear-gradient(to right,transparent,#212538)',
  'flex-row':'flex-direction:row','self-stretch':'align-self:stretch','opacity-0':'opacity:0',
  'bg-white':'background:white','border-white':'border-color:white','ml-0':'margin-left:0','mt-0':'margin-top:0',

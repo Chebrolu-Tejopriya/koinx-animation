@@ -20,6 +20,10 @@ featureStage.className = 'feature-scroll-stage';
 featureSequence.insertBefore(featureStage, featureColumn);
 featureStage.append(featureColumn, featureCopy);
 featureSequence.classList.add('feature-scroll-sequence');
+const featureNextSection = document.createElement('section');
+featureNextSection.className = 'feature-next-section';
+featureNextSection.setAttribute('aria-label','Next section');
+featurePanel.append(featureNextSection);
 featureColumn.tabIndex = 0;
 featureColumn.setAttribute('role', 'region');
 featureColumn.setAttribute('aria-label', mobileFeatures.matches ? 'Explore four features. Scroll the page or use the up and down arrow keys.' : 'Explore four features. Scroll here, swipe, or use the up and down arrow keys.');
@@ -46,6 +50,35 @@ const featureTiles = featureData.map((feature,index) => {
   featureDiagram.append(tile);
   return tile;
 });
+const versionSwitch = document.createElement('div');
+versionSwitch.className = 'feature-version-switch';
+versionSwitch.setAttribute('role','group');
+versionSwitch.setAttribute('aria-label','Feature icon version');
+const versionButtons = ['v1','v2'].map(version => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = version.toUpperCase();
+  button.setAttribute('aria-label',`Use ${version.toUpperCase()} icons`);
+  button.addEventListener('click',() => selectIconVersion(version));
+  versionSwitch.append(button);
+  return button;
+});
+document.querySelector('.view-tabs').append(versionSwitch);
+function selectIconVersion(version) {
+  const next = version === 'v2' ? 'v2' : 'v1';
+  featurePanel.dataset.iconVersion = next;
+  featureTiles.forEach((tile,index) => {
+    for (const state of ['default','selected']) {
+      const template = document.getElementById(`feature-${index+1}-${next==='v2'?'v2-':''}${state}`);
+      tile.querySelector(`.feature-variant-${state}`).replaceChildren(template.content.cloneNode(true));
+    }
+  });
+  versionButtons.forEach((button,index) => button.setAttribute('aria-pressed',String(next === `v${index+1}`)));
+  const url = new URL(location.href);
+  url.searchParams.set('featureVersion',next);
+  history.replaceState(null,'',url);
+}
+selectIconVersion(new URL(location.href).searchParams.get('featureVersion'));
 let selectedFeature = 0;
 let wheelTotal = 0;
 let wheelTime = 0;
@@ -57,15 +90,19 @@ function selectFeature(index, initial = false) {
   if (next === selectedFeature && !initial) return false;
   selectedFeature = next;
   featurePanel.dataset.selectedFeature = String(next+1);
+  const finalStack = mobileFeatures.matches && next === featureTiles.length-1;
   featureTiles.forEach((tile,tileIndex) => {
     const offset = tileIndex - selectedFeature;
-    const top = offset === -1 ? 0 : offset === 0 ? 242 : offset === 1 ? 494 : offset < -1 ? -252 : 746 + (offset-2)*252;
+    const visible = finalStack ? offset>=-2 && offset<=0 : Math.abs(offset)<=1;
+    const top = finalStack
+      ? offset === -2 ? 0 : offset === -1 ? 242 : offset === 0 ? 494 : -252
+      : offset === -1 ? 0 : offset === 0 ? 242 : offset === 1 ? 494 : offset < -1 ? -252 : 746 + (offset-2)*252;
     tile.classList.toggle('is-selected', offset === 0);
-    tile.classList.toggle('is-neighbor', Math.abs(offset) === 1);
+    tile.classList.toggle('is-neighbor', visible && offset !== 0);
     tile.style.transform = `translate3d(1px,${top}px,0)`;
-    tile.style.opacity = Math.abs(offset) <= 1 ? '1' : '0';
-    tile.style.pointerEvents = Math.abs(offset) <= 1 ? 'auto' : 'none';
-    tile.setAttribute('aria-hidden', String(Math.abs(offset)>1));
+    tile.style.opacity = visible ? '1' : '0';
+    tile.style.pointerEvents = visible ? 'auto' : 'none';
+    tile.setAttribute('aria-hidden', String(!visible));
     tile.setAttribute('aria-label',`${tileIndex+1}. ${featureData[tileIndex].title}${offset===0?', selected':''}`);
   });
   featureTitle.textContent = featureData[next].title;
@@ -73,8 +110,9 @@ function selectFeature(index, initial = false) {
   for (const id of ['189217','189218','189219','189220']) {
     const rail = featureDiagram.querySelector(`[data-node-id="11250:${id}"]`);
     rail.style.top = `${next===0?335.5:95.5}px`;
-    rail.style.height = `${next===0?229:next===3?240:468.5}px`;
+    rail.style.height = `${next===0?229:next===3&&!finalStack?240:468.5}px`;
   }
+  window.dispatchEvent(new Event('featureselectionchange'));
   if (!initial) {
     transitionUntil = performance.now()+600;
     featureCopy.classList.remove('feature-copy-enter');
@@ -113,7 +151,8 @@ featureColumn.addEventListener('keydown',event => {
   if (mobileFeatures.matches) {
     const start = featureSequence.getBoundingClientRect().top + window.scrollY;
     const travel = featureSequence.offsetHeight - featureStage.offsetHeight;
-    window.scrollTo({top:start+travel*target/3,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+    const step = (travel-96)/2.5;
+    window.scrollTo({top:start+Math.min(travel,target*step),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
   } else selectFeature(target);
 });
 let touchOrigin = null;
@@ -145,21 +184,45 @@ function updateMobileFeature() {
   if (!mobileFeatures.matches || featurePanel.hidden) return;
   const travel = featureSequence.offsetHeight - featureStage.offsetHeight;
   if (travel <= 0) return;
-  const progress = Math.max(0,Math.min(1,-featureSequence.getBoundingClientRect().top/travel));
-  selectFeature(Math.round(progress * (featureTiles.length - 1)));
+  const sequenceTop = featureSequence.getBoundingClientRect().top;
+  const start = sequenceTop + window.scrollY;
+  const pinned = start > 0 ? Math.max(0,Math.min(1,window.scrollY/start)) : 1;
+  featureStage.classList.toggle('is-pinned',sequenceTop<=0);
+  // Preserve the first three scroll intervals; end the final hold after 96px.
+  const step = (travel-96)/2.5;
+  const index = Math.max(0,Math.min(featureTiles.length-1,Math.round(-sequenceTop/step)));
+  const diagramHeight = featureDiagram.parentElement.offsetHeight;
+  const scale = diagramHeight / 684.5;
+  const centerOffset = (featureColumn.clientHeight-diagramHeight)/2;
+  // The final tile has no following neighbor. Bring it closer to the fixed
+  // details instead of leaving the empty lower half of the stack visible.
+  const offset = index === featureTiles.length-1
+    ? featureColumn.clientHeight - (494+199.5)*scale - 16
+    : centerOffset;
+  // Start the first selected tile directly below the heading, without an
+  // empty slot for a previous tile. Center the stack as the heading leaves.
+  const initialOffset = index === 0 ? -242*scale : 0;
+  featureStage.style.setProperty('--feature-diagram-offset',`${initialOffset*(1-pinned)+offset*pinned}px`);
+  selectFeature(index);
 }
 function scheduleMobileFeature() {
   if (!featureScrollFrame) featureScrollFrame = requestAnimationFrame(updateMobileFeature);
 }
 window.addEventListener('scroll',scheduleMobileFeature,{passive:true});
 window.addEventListener('resize',scheduleMobileFeature);
+window.addEventListener('featureselectionchange',scheduleMobileFeature);
 mobileFeatures.addEventListener('change',() => {
   touchOrigin = null;
   wheelConsumed = false;
+  selectFeature(selectedFeature,true);
   featureColumn.setAttribute('aria-label',mobileFeatures.matches
     ? 'Explore four features. Scroll the page or use the up and down arrow keys.'
     : 'Explore four features. Scroll here, swipe, or use the up and down arrow keys.');
   scheduleMobileFeature();
 });
 new ResizeObserver(scheduleMobileFeature).observe(featureStage);
+new ResizeObserver(() => {
+  featureStage.style.setProperty('--feature-copy-height', `${featureCopy.offsetHeight}px`);
+  scheduleMobileFeature();
+}).observe(featureCopy);
 scheduleMobileFeature();

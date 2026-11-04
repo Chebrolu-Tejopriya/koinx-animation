@@ -6,7 +6,9 @@ function selectView(tab, focus = false) {
     item.tabIndex = selected ? 0 : -1;
     document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
   }
-  history.replaceState(null, '', tab.id === 'books-tab' ? '#books' : '#features');
+  const url = new URL(location.href);
+  url.hash = tab.id === 'books-tab' ? 'books' : 'features';
+  history.replaceState(null, '', url);
   if (focus) tab.focus();
   window.dispatchEvent(new Event('resize'));
 }
@@ -24,10 +26,19 @@ tabs.forEach((tab, index) => {
 });
 selectView(document.getElementById(location.hash === '#books' ? 'books-tab' : 'features-tab'));
 const illustration = document.querySelector('[data-node-id="11250:189214"]');
-new ResizeObserver(() => {
+function sizeFeatureIllustration() {
   if (!illustration.clientWidth) return;
-  const scale = Math.min(1, (illustration.clientWidth - 32) / 302);
+  const mobile = window.matchMedia('(width < 700px)').matches;
+  const finalStack = mobile && document.getElementById('features-panel').dataset.selectedFeature === '4';
+  // Updated mobile Figma frame scales the existing artwork to 90.51%.
+  const scale = mobile
+    ? Math.min(.9051095, (illustration.clientWidth - 48) / 302,
+        finalStack ? Math.max(1,illustration.clientHeight-32)/693.5 : 1)
+    : Math.min(1, (illustration.clientWidth - 32) / 302);
   illustration.style.setProperty('--diagram-scale', scale);
-  illustration.style.setProperty('--diagram-width', `${302 * scale}px`);
+  illustration.style.setProperty('--diagram-width', `${(mobile ? 286 : 302) * scale}px`);
   illustration.style.setProperty('--diagram-height', `${684.5 * scale}px`);
-}).observe(illustration);
+}
+new ResizeObserver(sizeFeatureIllustration).observe(illustration);
+window.addEventListener('resize',sizeFeatureIllustration);
+window.addEventListener('featureselectionchange',sizeFeatureIllustration);
