@@ -21,8 +21,6 @@
 @keyframes outgoing-dots { to { background-position-x: 12px; } }
 
 /* Animate wrappers so the isometric transforms inside each tile stay intact. */
-.processor [data-node-id='11250:186120'],
-.processor [data-node-id='11250:186121'],
 .processor [data-node-id='11250:186123'],
 .processor [data-node-id='11250:186129'],
 .processor [data-node-id='11250:186141'],
@@ -43,6 +41,34 @@
 @keyframes processor-lift {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(var(--lift)); }
+}
+
+/* The two base plates stay stationary. Highlight one floating outer tile at
+   a time, clockwise from the top, without tinting its white icon. */
+.processor [data-node-id='11250:186124'],
+.processor [data-node-id='11250:186130'],
+.processor [data-node-id='11250:186142'],
+.processor [data-node-id='11250:186148'] { isolation: isolate; }
+.processor [data-node-id='11250:186124']::after,
+.processor [data-node-id='11250:186130']::after,
+.processor [data-node-id='11250:186142']::after,
+.processor [data-node-id='11250:186148']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg,rgba(76,156,255,.75),rgba(34,82,239,.5) 55%,rgba(34,82,239,.12));
+  mask: url('assets/processor-imgVector2.svg') center / 100% 100% no-repeat;
+  opacity: 0;
+  animation: processor-highlight 8s linear infinite;
+}
+.processor [data-node-id='11250:186130']::after { animation-delay: 0s; }
+.processor [data-node-id='11250:186142']::after { animation-delay: 2s; }
+.processor [data-node-id='11250:186148']::after { animation-delay: 4s; }
+.processor [data-node-id='11250:186124']::after { animation-delay: 6s; }
+@keyframes processor-highlight {
+  0%,25%,100% { opacity: 0; }
+  5%,20% { opacity: 1; }
 }
 
 /* Two identical groups make the downward marquee continuous at its seam. */
@@ -104,6 +130,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .processor [data-node-id]::after { animation: none !important; opacity: 0; }
   .flow-curve path, .connector, .processor [data-node-id], .statement-track { animation: none !important; }
   .flow-curve-ready > img { opacity: 1; }
   .flow-curve { display: none; }
