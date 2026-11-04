@@ -67,16 +67,15 @@ function place(element, x, y, scale = 1) {
 function fitResponsiveLayout() {
   const width = flow.clientWidth;
   if (!width) return;
-  const vertical = matchMedia('(width < 390px)').matches;
-  const tablet = !vertical && matchMedia('(width < 1000px)').matches;
+  const vertical = matchMedia('(width <= 1024px)').matches;
   const aligned = scene.dataset.iconLayout !== 'scattered';
   scene.classList.toggle('vertical-layout', vertical);
-  scene.classList.toggle('tablet-layout', tablet);
   let sourceX, sourceY, processorX, processorY, processorScale, statementX, statementY, statementScale, height;
   let iconScale = 1;
   if (vertical) {
-    sourceX = 0; sourceY = 8;
-    sources.style.width = `${width}px`;
+    const sourceWidth = Math.min(width,520);
+    sourceX = (width-sourceWidth)/2; sourceY = 8;
+    sources.style.width = `${sourceWidth}px`;
     sources.style.height = aligned ? '205px' : '390px';
     processorScale = Math.min(1, (width - 16) / 300);
     processorX = (width - 283.503 * processorScale) / 2;
@@ -85,25 +84,10 @@ function fitResponsiveLayout() {
     statementX = (width - 464 * statementScale) / 2;
     statementY = processorY + 227 * processorScale + 68;
     height = statementY + 416 * statementScale;
-    const step = Math.max(0, (width - 65) / 3);
+    const step = Math.max(0, (sourceWidth - 65) / 3);
     iconPositions.forEach(({element,x,y}, index) => place(element,
-      aligned ? 8 + index % 4 * step : 8 + x / 252.94 * (width - 65),
+      aligned ? 8 + index % 4 * step : 8 + x / 252.94 * (sourceWidth - 65),
       aligned ? Math.floor(index / 4) * 74 : y * .85));
-  } else if (tablet) {
-    const sourceWidth = width * .43;
-    sourceX = 0; sourceY = 10;
-    sources.style.width = `${sourceWidth}px`;
-    sources.style.height = '370px';
-    iconScale = .82;
-    processorScale = Math.min(1, width * .43 / 283.503);
-    processorX = width - 283.503 * processorScale - 8;
-    processorY = (370 - 227 * processorScale) / 2;
-    statementScale = Math.min(1, width / 464);
-    statementX = (width - 464 * statementScale) / 2;
-    statementY = 430;
-    height = statementY + 416 * statementScale;
-    iconPositions.forEach(({element,x,y}) => place(element, x / 252.94 * (sourceWidth - 48.633 * iconScale), y * .78, iconScale));
-    if (aligned) placeAlignedIcons(sourceWidth, 370, iconScale);
   } else {
     sourceX = width * 42.3556 / 1276; sourceY = 19.0988;
     const sourceWidth = width * 357.861 / 1276;
@@ -135,11 +119,11 @@ function fitResponsiveLayout() {
   });
   inputRouting = {starts, vertical, processorX, processorY, processorScale};
   drawIncomingWires();
-  const fromX = processorX + (tablet || vertical ? 141.75 : 282) * processorScale;
-  const fromY = processorY + (tablet || vertical ? 227 : 113) * processorScale;
-  const toX = tablet || vertical ? statementX + 232 * statementScale : statementX;
-  const toY = tablet || vertical ? statementY - 8 : statementY + 208 * statementScale;
-  outputPath.setAttribute('d', tablet || vertical
+  const fromX = processorX + (vertical ? 141.75 : 282) * processorScale;
+  const fromY = processorY + (vertical ? 227 : 113) * processorScale;
+  const toX = vertical ? statementX + 232 * statementScale : statementX;
+  const toY = vertical ? statementY - 8 : statementY + 208 * statementScale;
+  outputPath.setAttribute('d', vertical
     ? `M${fromX},${fromY} C${fromX},${fromY+24} ${toX},${toY-24} ${toX},${toY}`
     : `M${fromX},${fromY} C${fromX+24},${fromY} ${toX-24},${toY} ${toX},${toY}`);
 }

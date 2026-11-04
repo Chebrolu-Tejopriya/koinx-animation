@@ -27,7 +27,7 @@ iconLayoutControl.addEventListener('click', event => {
   const button = event.target.closest('button[data-icon-layout]');
   if (!button) return;
   document.querySelector('.scene').dataset.iconLayout = button.dataset.iconLayout;
-  for (const option of iconLayoutControl.querySelectorAll('button')) {
+  for (const option of iconLayoutControl.querySelectorAll('button[data-icon-layout]')) {
     option.setAttribute('aria-pressed', String(option === button));
   }
   window.dispatchEvent(new Event('resize'));
