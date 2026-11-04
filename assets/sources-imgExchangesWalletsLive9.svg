@@ -1,0 +1,24 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="36.4756" height="35.5403" viewBox="0 0 36.4756 35.5403" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Exchanges&#38;Wallets_Live">
+<path id="Vector" d="M18.2377 0C28.3025 0 36.4755 7.94555 36.4755 17.7701C36.4755 27.5768 28.3208 35.5402 18.2377 35.5402C8.17301 35.5402 0 27.5768 0 17.7701C0 7.94555 8.15464 0 18.2377 0Z" fill="#212538"/>
+<g id="CryptoLogos">
+<path id="Vector_2" d="M10.485 22.1879C10.6236 22.0587 10.8141 21.9833 11.0162 21.9833H29.3452C29.6802 21.9833 29.8476 22.3602 29.6109 22.5809L25.9901 25.9569C25.8515 26.0861 25.661 26.1615 25.4588 26.1615H7.12985C6.79492 26.1615 6.62745 25.7846 6.86421 25.5639L10.485 22.1879Z" fill="url(#paint0_linear_0_109)"/>
+<path id="Vector_3" d="M10.485 9.58329C10.6293 9.45407 10.8199 9.37868 11.0162 9.37868H29.3452C29.6802 9.37868 29.8476 9.75559 29.6109 9.97634L25.9901 13.3523C25.8515 13.4815 25.661 13.5569 25.4588 13.5569H7.12985C6.79492 13.5569 6.62745 13.18 6.86421 12.9593L10.485 9.58329Z" fill="url(#paint1_linear_0_109)"/>
+<path id="Vector_4" d="M25.9901 15.8451C25.8515 15.7159 25.661 15.6405 25.4588 15.6405H7.12985C6.79492 15.6405 6.62745 16.0174 6.86421 16.2382L10.485 19.6141C10.6236 19.7434 10.8141 19.8187 11.0162 19.8187H29.3452C29.6802 19.8187 29.8476 19.4418 29.6109 19.2211L25.9901 15.8451Z" fill="url(#paint2_linear_0_109)"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_109" x1="27.5943" y1="7.36189" x2="16.2489" y2="30.6685" gradientUnits="userSpaceOnUse">
+<stop stop-color="#00FFA3"/>
+<stop offset="1" stop-color="#DC1FFF"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_109" x1="22.0477" y1="4.66195" x2="10.7023" y2="27.9686" gradientUnits="userSpaceOnUse">
+<stop stop-color="#00FFA3"/>
+<stop offset="1" stop-color="#DC1FFF"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_109" x1="24.8033" y1="6.00325" x2="13.4579" y2="29.3099" gradientUnits="userSpaceOnUse">
+<stop stop-color="#00FFA3"/>
+<stop offset="1" stop-color="#DC1FFF"/>
+</linearGradient>
+</defs>
+</svg>

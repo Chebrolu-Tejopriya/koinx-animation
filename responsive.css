@@ -1,0 +1,49 @@
+/* Fluid containers replace artboard-wide shrinking. */
+.viewport { height: auto !important; }
+.scene {
+  width: min(100%, 1440px) !important;
+  height: auto;
+  margin: 0 auto !important;
+  padding: 50px clamp(16px, 5.5556vw, 80px);
+  transform: none !important;
+}
+.heading { position: relative; left: auto; top: auto; width: 100%; height: auto; }
+.heading > div { height: auto; white-space: normal; }
+.heading [data-node-id='11250:186034'] { max-width: 100%; }
+.heading [data-node-id='11250:186034'] p { line-height: 1.2; }
+.heading [data-node-id='11250:186035'] { width: 100%; white-space: normal; }
+.flow { position: relative; left: auto; top: auto; width: calc(100% - 4px); margin: 64px 2px 0; }
+.sources, .processor, .statement { z-index: 1; }
+.sources > div > div:nth-child(-n + 10) { display: none; }
+.sources > div > div:nth-child(n + 11) { rotate: none; }
+.connector { display: none; }
+.responsive-wires { position: absolute; inset: 0; overflow: visible; pointer-events: none; z-index: 0; }
+.responsive-wire {
+  fill: none;
+  stroke: #7683a5;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 2 9;
+  animation: incoming-dots 2.2s linear infinite;
+}
+.output-wire { stroke: #484e63; stroke-dasharray: 6 6; animation-name: output-dots; animation-duration: 1.2s; }
+.icon-layout-control { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px; margin-top: 22px; }
+.icon-layout-control > span { color: #a9afc5; font: 400 12px/20px 'Space Grotesk',sans-serif; margin-right: 8px; }
+.icon-layout-control button { padding: 6px 12px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #a9afc5; font: 500 12px/20px 'Space Grotesk',sans-serif; cursor: pointer; }
+.icon-layout-control button[aria-pressed='true'] { background: #171a26; border-color: #2d3246; color: #eff5ff; }
+.icon-layout-control button:hover { color: white; background: #171a26; }
+.icon-layout-control button:focus-visible { outline: 2px solid #517cff; outline-offset: 3px; }
+@keyframes output-dots { to { stroke-dashoffset: -48; } }
+@media (width < 1000px) {
+  .scene { padding: 32px 24px; }
+  .heading [data-node-id='11250:186034'] { font-size: clamp(26px, 4vw, 36px); }
+  .heading [data-node-id='11250:186035'] { font-size: 16px; line-height: 25px; }
+  .flow { margin-top: 40px; }
+}
+@media (width < 390px) {
+  .scene { padding: 28px 16px 32px; }
+  .heading [data-node-id='11250:186034'] { font-size: clamp(22px, 7.2vw, 28px); }
+  .heading [data-node-id='11250:186035'] { font-size: 14px; line-height: 22px; }
+  .flow { width: 100%; margin: 34px 0 0; }
+}
+@media (prefers-reduced-motion: reduce) { .responsive-wire { animation: none; } }

@@ -1,0 +1,111 @@
+/* Flow follows the original Figma curves. Negative offsets move along the path;
+   the two 180-degree curves reverse the offset to keep motion left-to-right. */
+.flow-curve path {
+  stroke: #7683a5;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 2 9;
+  animation: incoming-dots 2.2s linear infinite;
+}
+.flow-curve.reverse path { animation-direction: reverse; }
+.flow-curve { pointer-events: none; }
+.flow-curve-ready > img { opacity: 0; }
+@keyframes incoming-dots { to { stroke-dashoffset: -44; } }
+
+.connector {
+  overflow: hidden;
+  background: url('assets/connector.svg') repeat-x;
+  animation: outgoing-dots 1.2s linear infinite;
+}
+.connector > img { opacity: 0; }
+@keyframes outgoing-dots { to { background-position-x: 12px; } }
+
+/* Animate wrappers so the isometric transforms inside each tile stay intact. */
+.processor [data-node-id='11250:186120'],
+.processor [data-node-id='11250:186121'],
+.processor [data-node-id='11250:186123'],
+.processor [data-node-id='11250:186129'],
+.processor [data-node-id='11250:186141'],
+.processor [data-node-id='11250:186147'],
+.processor [data-node-id='11250:186153'] {
+  --lift: -15px;
+  animation: processor-lift 4.8s ease-in-out infinite;
+  animation-delay: 0s;
+  will-change: transform;
+}
+/* This Figma group uses display:contents; give the complete logo tile one
+   positioning box so its plate and orange mark lift together. */
+.processor [data-node-id='11250:186153'] {
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+@keyframes processor-lift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(var(--lift)); }
+}
+
+/* Two identical groups make the downward marquee continuous at its seam. */
+.statement-track {
+  position: absolute;
+  left: 9px;
+  top: 9px;
+  width: 446px;
+  animation: statement-down 36s linear infinite;
+  animation-direction: reverse;
+  will-change: transform;
+}
+.statement-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+.statement-track .chart,
+.statement-track .report-panel,
+.statement-track .reconciliation {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 446px;
+  flex: none;
+}
+.reconciliation {
+  height: 282.014px;
+  overflow: hidden;
+  padding: 10.445px;
+  border: .567px solid #484e63;
+  border-radius: 6px;
+  background: #171a26;
+}
+.reconciliation h2 {
+  margin: 0 0 5.222px 2.089px;
+  font-size: 11.788px;
+  font-weight: 600;
+  line-height: 14.623px;
+}
+.recon-columns { height: 19.846px; }
+.recon-fields { height: 27.679px; }
+.recon-row { height: 27.679px; }
+.recon-fields > div { overflow: hidden; }
+.statement-window::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  pointer-events: none;
+  background: linear-gradient(#0a0a12, transparent);
+}
+@keyframes statement-down {
+  0% { transform: translate3d(0, -50%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-curve path, .connector, .processor [data-node-id], .statement-track { animation: none !important; }
+  .flow-curve-ready > img { opacity: 1; }
+  .flow-curve { display: none; }
+  .statement-track { transform: translateY(-50%); }
+}
