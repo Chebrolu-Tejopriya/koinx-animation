@@ -2,7 +2,8 @@
 // and report internals scale. The connecting paths are rebuilt in CSS pixels.
 const scene = document.querySelector('.scene');
 const flow = document.querySelector('.flow');
-const sources = document.querySelector('.sources');
+const defaultSources = document.querySelector('.sources');
+const columnSources = document.querySelector('.column-sources');
 const processor = document.querySelector('.processor');
 const statement = document.querySelector('.statement');
 const svgNamespace = 'http://www.w3.org/2000/svg';
@@ -10,16 +11,16 @@ const wires = document.createElementNS(svgNamespace, 'svg');
 wires.classList.add('responsive-wires');
 wires.setAttribute('aria-hidden', 'true');
 flow.prepend(wires);
-const iconPositions = [
+const defaultIconPositions = [
   ['186050',32.66,153.73],['186055',94.85,0],['186060',0,308.31],
   ['186062',126.47,215.81],['186067',189.71,92.49],['186069',221.32,246.65],
   ['186080',158.09,339.13],['186085',189.71,400.8],['186090',63.24,400.8],
   ['186101',252.94,154.15],['186106',18.98,246.65],['186117',233.97,30.83],
-].map(([id,x,y]) => ({element: sources.querySelector(`[data-node-id="11250:${id}"]`), x, y}));
-const paths = iconPositions.map((_, index) => {
+].map(([id,x,y]) => ({element: defaultSources.querySelector(`[data-node-id="11250:${id}"]`), x, y}));
+const columnIconPositions = ["11313:154526","11313:154531","11313:154533","11313:154535","11313:154540","11313:154545","11313:154547","11313:154550","11313:154555","11313:154560","11313:154566","11313:154568","11313:154572","11313:154575","11313:154580","11313:154585","11313:154587","11313:154593","11313:154598"].map(id => ({element:columnSources.querySelector(`[data-node-id="${id}"]`)}));
+const paths = columnIconPositions.map((_, index) => {
   const path = document.createElementNS(svgNamespace, 'path');
   path.classList.add('responsive-wire');
-  path.dataset.sourceNode = iconPositions[index].element.getAttribute('data-node-id');
   path.style.animationDelay = `${index * -.23}s`;
   wires.append(path);
   return path;
@@ -68,11 +69,38 @@ function fitResponsiveLayout() {
   const width = flow.clientWidth;
   if (!width) return;
   const vertical = matchMedia('(width <= 1024px)').matches;
+  const columnMode = scene.dataset.iconLayout === 'columns';
+  const sources = columnMode ? columnSources : defaultSources;
+  const iconPositions = columnMode ? columnIconPositions : defaultIconPositions;
+  defaultSources.hidden = columnMode;
+  columnSources.hidden = !columnMode;
+  paths.forEach((path,index) => {
+    path.style.display = index < iconPositions.length ? '' : 'none';
+    if (index < iconPositions.length) path.dataset.sourceNode = iconPositions[index].element.dataset.nodeId;
+  });
   const aligned = scene.dataset.iconLayout !== 'scattered';
   scene.classList.toggle('vertical-layout', vertical);
   let sourceX, sourceY, processorX, processorY, processorScale, statementX, statementY, statementScale, height;
   let iconScale = 1;
-  if (vertical) {
+  let sourceScale = 1;
+  if (columnMode) {
+    sourceScale = vertical ? Math.min(1,(width-16)/426) : Math.min(1,width/1276);
+    sourceX = vertical ? (width-426*sourceScale)/2 : 0;
+    sourceY = 10;
+    processorScale = vertical ? Math.min(1,(width-16)/300) : sourceScale;
+    processorX = vertical ? (width-283.503*processorScale)/2 : width*480/1276;
+    statementScale = vertical ? Math.min(1,width/464) : sourceScale;
+    statementX = vertical ? (width-464*statementScale)/2 : width-464*statementScale;
+    if (vertical) {
+      processorY = 530*sourceScale+90;
+      statementY = processorY+227*processorScale+68;
+      height = statementY+416*statementScale;
+    } else {
+      height = Math.max(515,530*sourceScale);
+      processorY = (height-227*processorScale)/2;
+      statementY = (height-416*statementScale)/2;
+    }
+  } else if (vertical) {
     const sourceWidth = Math.min(width,520);
     sourceX = (width-sourceWidth)/2; sourceY = 8;
     sources.style.width = `${sourceWidth}px`;
@@ -103,7 +131,7 @@ function fitResponsiveLayout() {
     iconPositions.forEach(({element,x,y}) => place(element, x * sourceWidth / 357.861, y));
     if (aligned) placeAlignedIcons(sourceWidth, 449.431, 1);
   }
-  place(sources, sourceX, sourceY);
+  place(sources, sourceX, sourceY,sourceScale);
   place(processor, processorX, processorY, processorScale);
   place(statement, statementX, statementY, statementScale);
   flow.style.height = `${height}px`;
@@ -128,6 +156,7 @@ function fitResponsiveLayout() {
     : `M${fromX},${fromY} C${fromX+24},${fromY} ${toX-24},${toY} ${toX},${toY}`);
 }
 function placeAlignedIcons(width, height, scale) {
+  const iconPositions = defaultIconPositions;
   const columns = width >= 270 ? 4 : width >= 190 ? 3 : 2;
   const rows = Math.ceil(iconPositions.length / columns);
   const tile = 48.633 * scale;

@@ -14,6 +14,8 @@
 .heading [data-node-id='11250:186035'] { width: 100%; white-space: normal; }
 .flow { position: relative; left: auto; top: auto; width: calc(100% - 4px); margin: 64px 2px 0; }
 .sources, .processor, .statement { z-index: 1; }
+.column-sources { position: absolute; width: 426px; height: 530px; z-index: 1; }
+.column-sources [data-node-id='11313:154706'] { display: none; }
 .sources > div > div:nth-child(-n + 10) { display: none; }
 .sources > div > div:nth-child(n + 11) { rotate: none; }
 .connector { display: none; }

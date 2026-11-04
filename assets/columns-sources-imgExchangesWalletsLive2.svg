@@ -1,0 +1,24 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="42" height="40.9231" viewBox="0 0 42 40.9231" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Exchanges&#38;Wallets_Live">
+<path id="Vector" d="M21 0C32.5891 0 41.9999 9.14895 41.9999 20.4615C41.9999 31.7534 32.6102 40.923 21 40.923C9.41086 40.923 0 31.7534 0 20.4615C0 9.14895 9.38971 0 21 0Z" fill="#212538"/>
+<g id="CryptoLogos">
+<path id="Vector_2" d="M12.073 25.5484C12.2326 25.3996 12.452 25.3128 12.6847 25.3128H33.7897C34.1754 25.3128 34.3682 25.7468 34.0956 26.001L29.9265 29.8882C29.7669 30.037 29.5475 30.1238 29.3147 30.1238H8.20971C7.82405 30.1238 7.63122 29.6899 7.90384 29.4357L12.073 25.5484Z" fill="url(#paint0_linear_0_1269)"/>
+<path id="Vector_3" d="M12.073 11.0347C12.2392 10.8859 12.4586 10.7991 12.6847 10.7991H33.7897C34.1754 10.7991 34.3682 11.2331 34.0956 11.4873L29.9265 15.3746C29.7669 15.5234 29.5475 15.6102 29.3147 15.6102H8.20971C7.82405 15.6102 7.63122 15.1762 7.90384 14.922L12.073 11.0347Z" fill="url(#paint1_linear_0_1269)"/>
+<path id="Vector_4" d="M29.9265 18.245C29.7669 18.0962 29.5475 18.0094 29.3147 18.0094H8.20971C7.82405 18.0094 7.63122 18.4434 7.90384 18.6976L12.073 22.5848C12.2326 22.7336 12.452 22.8204 12.6847 22.8204H33.7897C34.1754 22.8204 34.3682 22.3864 34.0956 22.1322L29.9265 18.245Z" fill="url(#paint2_linear_0_1269)"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_1269" x1="31.7736" y1="8.47689" x2="18.7099" y2="35.3135" gradientUnits="userSpaceOnUse">
+<stop stop-color="#00FFA3"/>
+<stop offset="1" stop-color="#DC1FFF"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_1269" x1="25.3869" y1="5.36803" x2="12.3232" y2="32.2046" gradientUnits="userSpaceOnUse">
+<stop stop-color="#00FFA3"/>
+<stop offset="1" stop-color="#DC1FFF"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_1269" x1="28.5599" y1="6.91248" x2="15.4962" y2="33.749" gradientUnits="userSpaceOnUse">
+<stop stop-color="#00FFA3"/>
+<stop offset="1" stop-color="#DC1FFF"/>
+</linearGradient>
+</defs>
+</svg>

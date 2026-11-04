@@ -6,6 +6,7 @@ sources += json.loads(Path('reconciliation-context.json').read_text(encoding='ut
 sources += json.loads(Path('features-context.json').read_text(encoding='utf-8'))
 sources += json.loads(Path('feature-motion-parts.json').read_text(encoding='utf-8'))
 sources += json.loads(Path('feature-v2-parts.json').read_text(encoding='utf-8'))
+sources += json.loads(Path('columns-sources-context.json').read_text(encoding='utf-8'))
 assets = {}
 for item in sources:
     for name, url in re.findall(r'const (\w+) = "(https:[^"]+)";', item['code']):
@@ -85,6 +86,7 @@ page='''<!doctype html>
 <section class="statement" aria-label="Unified Statement">LABEL<div class="statement-window"><div class="chart">CHART</div><div class="report-panel"><div class="reports">REPORTS</div><div class="balances">BALANCES</div></div><div class="fade-right"></div><div class="fade-bottom"></div></div></section></div>
 </section></main><script src="app.js"></script><script src="responsive.js"></script></body></html>'''
 for k in ['heading','sources','processor','label','chart','reports','balances']:page=page.replace(k.upper(),parts[k])
+page=page.replace('<div class="processor"', '<div class="column-sources" aria-label="Exchange icons in staggered columns" hidden>'+parts['columns-sources']+'</div><div class="processor"',1)
 recon='<section class="reconciliation marquee-card" aria-label="Reconciliation"><h2>Reconciliation</h2><div class="recon-columns">'+parts['recon-columns']+'</div><div class="recon-fields">'+parts['recon-fields']+'</div>'+''.join('<div class="recon-row">'+parts[f'recon-row-{i}']+'</div>' for i in range(1,8))+'</section>'
 page=page.replace('<div class="fade-right"></div>',recon+'<div class="fade-right"></div>')
 page=page.replace('<div class="connector"></div>', '<div class="connector"><img src="assets/connector.svg" alt=""></div>')

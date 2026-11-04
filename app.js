@@ -20,13 +20,31 @@ const iconLayoutControl = document.createElement('div');
 iconLayoutControl.className = 'icon-layout-control';
 iconLayoutControl.setAttribute('role', 'group');
 iconLayoutControl.setAttribute('aria-label', 'Exchange icon layout');
-iconLayoutControl.innerHTML = '<span>Icon layout</span><button type="button" data-icon-layout="scattered" aria-pressed="true">Scattered</button><button type="button" data-icon-layout="aligned" aria-pressed="false">Aligned</button>';
+iconLayoutControl.innerHTML = '<span>Icon layout</span><button type="button" data-icon-layout="scattered" aria-pressed="true">Scattered</button><button type="button" data-icon-layout="aligned" aria-pressed="false">Aligned</button><button type="button" data-icon-layout="columns" aria-pressed="false">Columns</button>';
 document.querySelector('.heading').append(iconLayoutControl);
-document.querySelector('.scene').dataset.iconLayout = 'scattered';
+const requestedLayout = new URL(location.href).searchParams.get('iconLayout');
+const initialLayout = ['aligned','columns'].includes(requestedLayout) ? requestedLayout : 'scattered';
+document.querySelector('.scene').dataset.iconLayout = initialLayout;
+function updateStatementOrder(layout) {
+  const order = layout === 'columns'
+    ? ['.chart','.reconciliation','.report-panel']
+    : ['.chart','.report-panel','.reconciliation'];
+  for (const group of document.querySelectorAll('.statement-group')) {
+    for (const selector of order) group.append(group.querySelector(selector));
+  }
+}
+updateStatementOrder(initialLayout);
+for (const button of iconLayoutControl.querySelectorAll('button[data-icon-layout]')) {
+  button.setAttribute('aria-pressed',String(button.dataset.iconLayout === initialLayout));
+}
 iconLayoutControl.addEventListener('click', event => {
   const button = event.target.closest('button[data-icon-layout]');
   if (!button) return;
   document.querySelector('.scene').dataset.iconLayout = button.dataset.iconLayout;
+  updateStatementOrder(button.dataset.iconLayout);
+  const url = new URL(location.href);
+  url.searchParams.set('iconLayout',button.dataset.iconLayout);
+  history.replaceState(null,'',url);
   for (const option of iconLayoutControl.querySelectorAll('button[data-icon-layout]')) {
     option.setAttribute('aria-pressed', String(option === button));
   }
