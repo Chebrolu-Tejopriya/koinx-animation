@@ -84,6 +84,11 @@ let wheelTotal = 0;
 let wheelTime = 0;
 let wheelConsumed = false;
 let transitionUntil = 0;
+function pinDesktopFrame() {
+  if (mobileFeatures.matches) return;
+  const top = featurePanel.getBoundingClientRect().top + window.scrollY;
+  window.scrollTo({top,behavior:'instant'});
+}
 
 function selectFeature(index, initial = false) {
   const next = Math.max(0,Math.min(featureTiles.length-1,index));
@@ -134,6 +139,7 @@ featureColumn.addEventListener('wheel',event => {
   if (atBoundary && !wheelConsumed && now>=transitionUntil) return;
   event.preventDefault();
   if (wheelConsumed || now<transitionUntil) return;
+  pinDesktopFrame();
   const pixels = event.deltaY * (event.deltaMode===1?16:event.deltaMode===2?featureColumn.clientHeight:1);
   wheelTotal = Math.sign(wheelTotal)!==Math.sign(pixels)?pixels:wheelTotal+pixels;
   if (Math.abs(wheelTotal)<60) return;
@@ -145,6 +151,8 @@ featureColumn.addEventListener('wheel',event => {
 featureColumn.addEventListener('keydown',event => {
   const direction = event.key==='ArrowDown'||event.key==='PageDown'?1:event.key==='ArrowUp'||event.key==='PageUp'?-1:0;
   if (!direction && !['Home','End'].includes(event.key)) return;
+  if (!mobileFeatures.matches && performance.now()>=transitionUntil &&
+      (direction>0&&selectedFeature===3 || direction<0&&selectedFeature===0)) return;
   event.preventDefault();
   if (performance.now()<transitionUntil) return;
   const target = event.key==='Home'?0:event.key==='End'?3:Math.max(0,Math.min(3,selectedFeature+direction));
@@ -153,8 +161,16 @@ featureColumn.addEventListener('keydown',event => {
     const travel = featureSequence.offsetHeight - featureStage.offsetHeight;
     const step = (travel-96)/2.5;
     window.scrollTo({top:start+Math.min(travel,target*step),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
-  } else selectFeature(target);
+  } else { pinDesktopFrame(); selectFeature(target); }
 });
+// Wheel input outside the stack keeps the pinned desktop frame steady, while
+// the first/last boundary remains available for normal section navigation.
+featurePanel.addEventListener('wheel',event => {
+  if (mobileFeatures.matches || event.defaultPrevented || featureColumn.contains(event.target)) return;
+  if (selectedFeature===3 || event.deltaY<0&&selectedFeature===0) return;
+  const frame = featurePanel.querySelector('.features-artboard').getBoundingClientRect();
+  if (frame.top<=1 && frame.bottom>0) event.preventDefault();
+},{passive:false});
 let touchOrigin = null;
 featureColumn.addEventListener('touchstart',event => {
   if (mobileFeatures.matches) return;
@@ -172,6 +188,7 @@ featureColumn.addEventListener('touchmove',event => {
   event.preventDefault();
   if (touchOrigin.consumed||performance.now()<transitionUntil||Math.abs(delta)<45) return;
   touchOrigin.consumed=true;
+  pinDesktopFrame();
   selectFeature(selectedFeature+Math.sign(delta));
 },{passive:false});
 featureColumn.addEventListener('touchend',()=>{touchOrigin=null;},{passive:true});

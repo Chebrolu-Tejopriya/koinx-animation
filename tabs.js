@@ -29,12 +29,15 @@ const illustration = document.querySelector('[data-node-id="11250:189214"]');
 function sizeFeatureIllustration() {
   if (!illustration.clientWidth) return;
   const mobile = window.matchMedia('(width < 700px)').matches;
+  const sectionHeader = document.querySelector('[data-node-id="11250:189210"]');
+  const desktopHeight = Math.max(120,window.innerHeight-78-(window.innerWidth<1000?sectionHeader.offsetHeight:0));
+  document.getElementById('features-panel').style.setProperty('--desktop-column-height',`${desktopHeight}px`);
   const finalStack = mobile && document.getElementById('features-panel').dataset.selectedFeature === '4';
   // Updated mobile Figma frame scales the existing artwork to 90.51%.
   const scale = mobile
     ? Math.min(.9051095, (illustration.clientWidth - 48) / 302,
         finalStack ? Math.max(1,illustration.clientHeight-32)/693.5 : 1)
-    : Math.min(1, (illustration.clientWidth - 32) / 302);
+    : Math.min(1, (illustration.clientWidth - 32) / 302,(desktopHeight-32)/693.5);
   illustration.style.setProperty('--diagram-scale', scale);
   illustration.style.setProperty('--diagram-width', `${(mobile ? 286 : 302) * scale}px`);
   illustration.style.setProperty('--diagram-height', `${684.5 * scale}px`);
