@@ -38,6 +38,64 @@ body:has(#features-panel[hidden]) .feature-version-switch { display: none; }
 .feature-variant-selected { opacity: 0; }
 .feature-tile.is-selected .feature-variant-selected { opacity: 1; }
 .feature-tile.is-selected .feature-variant-default { opacity: 0; }
+/* Figma positions each V2 glyph on the tile face with an affine transform. */
+.feature-variant :is(
+  [data-node-id='11304:33484'],
+  [data-node-id='11304:33470'],
+  [data-node-id='11304:33461'],
+  [data-node-id='11304:33447'],
+  [data-node-id='11304:33496'],
+  [data-node-id='11304:33507'],
+  [data-node-id='11304:33519'],
+  [data-node-id='11304:33533']
+) {
+  display: block;
+  inset: 0 auto auto 0;
+  width: 55.5206px;
+  height: 55.5206px;
+  transform-origin: top left;
+  transform: var(--feature-icon-transform);
+}
+.feature-variant :is(
+  [data-node-id='11304:33484'],
+  [data-node-id='11304:33470'],
+  [data-node-id='11304:33461'],
+  [data-node-id='11304:33447'],
+  [data-node-id='11304:33496'],
+  [data-node-id='11304:33507'],
+  [data-node-id='11304:33519'],
+  [data-node-id='11304:33533']
+) > div {
+  width: 100%;
+  height: 100%;
+  rotate: none;
+  scale: none;
+  transform: none;
+}
+[data-node-id='11304:33484'] {
+  --feature-icon-transform: matrix(-0.92138, 0.38867, 0.79733, 0.60355, 145.375, 45.55127);
+}
+[data-node-id='11304:33470'] {
+  --feature-icon-transform: matrix(-0.92138, 0.38867, 0.79733, 0.60355, 148.52734, 45.21436);
+}
+[data-node-id='11304:33461'] {
+  --feature-icon-transform: matrix(-0.91109, 0.4122, 0.81256, 0.58287, 144.66797, 45.47168);
+}
+[data-node-id='11304:33447'] {
+  --feature-icon-transform: matrix(-0.91109, 0.4122, 0.81256, 0.58287, 147.81641, 45.13525);
+}
+[data-node-id='11304:33496'] {
+  --feature-icon-transform: matrix(-0.92138, 0.38867, 0.79733, 0.60355, 145.375, 45.5498);
+}
+[data-node-id='11304:33507'] {
+  --feature-icon-transform: matrix(-0.92138, 0.38867, 0.79733, 0.60355, 148.52734, 47.21387);
+}
+[data-node-id='11304:33519'] {
+  --feature-icon-transform: matrix(-0.89018, 0.4556, 0.8397, 0.54306, 143.33203, 45.37061);
+}
+[data-node-id='11304:33533'] {
+  --feature-icon-transform: matrix(-0.89018, 0.4556, 0.8397, 0.54306, 146.48438, 47.03467);
+}
 .features-interactive [data-node-id='11250:189254'] { transition: background-color 180ms ease; }
 .feature-copy-enter { animation: feature-copy-enter 240ms ease-out; }
 @keyframes feature-copy-enter { from { opacity: .25; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }

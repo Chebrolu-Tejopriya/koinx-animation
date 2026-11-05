@@ -1,8 +1,20 @@
 const featureData = [
-  {title:'Automated Transaction Classification',description:'Automatically organize complex crypto transactions into clear, accurate records.'},
-  {title:'Real-time Financial Analytics',description:'Access up-to-the-minute insights of your financial health and performance metrics.'},
-  {title:'Seamless Team Collaboration',description:'Bring your finance team together with shared access and coordinated workflows.'},
-  {title:'Simplified Financial Reconciliation',description:'Match transactions, identify discrepancies, and keep your books accurate with less manual effort.'},
+  {
+    "title": "Unified Financial Platform",
+    "description": "Manage all your financial operations in one place with our comprehensive platform built for modern businesses."
+  },
+  {
+    "title": "Real-time Financial Analytics",
+    "description": "Access up-to-the-minute insights of your financial health and performance metrics."
+  },
+  {
+    "title": "Team Collaboration",
+    "description": "Enable secure collaboration with role-based access controls and real-time updates across your organization."
+  },
+  {
+    "title": "Automated Compliance",
+    "description": "Stay compliant with regulations across multiple jurisdictions with built-in compliance checks and updates."
+  }
 ];
 const featurePanel = document.getElementById('features-panel');
 const featureColumn = featurePanel.querySelector('[data-node-id="11250:189214"]');
